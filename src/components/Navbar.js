@@ -102,6 +102,7 @@ class NavBar extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
+    this.obtenerRuta = this.obtenerRuta.bind(this);
   }
   //isMobile = useMediaQuery(this.theme.breakpoints.down("xs"));
   //Funcion encargada de finalizar la sesión
@@ -126,6 +127,16 @@ class NavBar extends Component {
     let history = useHistory();
     history.push(path);
   }
+  obtenerRuta(){
+    var pathname = window.location.pathname;
+    pathname = pathname.slice(1);
+    pathname = pathname.charAt(0).toUpperCase() + pathname.slice(1);
+    if(pathname=== "")
+    {
+        pathname="Dashboard";
+    }
+    return pathname;
+}
 
   render() {
     const { classes } = this.props;
@@ -150,7 +161,7 @@ class NavBar extends Component {
             </IconButton>
 
             <Typography variant="h6" className={classes.title}>
-              <Hidden smDown>Photos</Hidden>
+              <Hidden smDown>{this.obtenerRuta()}</Hidden>
             </Typography>
             <Hidden mdUp>
               {/*El logo de la aplicación para movil*/}
