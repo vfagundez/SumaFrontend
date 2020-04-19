@@ -6,12 +6,15 @@ import {
   ListItemAvatar,
   Avatar,
   List,
-  withStyles
+  withStyles,
+  ListItemSecondaryAction,
+  IconButton
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import FolderIcon from "@material-ui/icons/Folder";
 import ListItemText from "@material-ui/core/ListItemText";
 import elijaCuenta from "./../assets/elijacuenta.PNG";
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -80,6 +83,7 @@ class InformacionCuentas extends Component {
       token: '0',
       open: this.props.open
     };
+    this.prueba =this.prueba.bind(this);
   }
   componentWillMount(){
     var userdata = JSON.parse(sessionStorage.getItem("userData"));
@@ -107,6 +111,9 @@ class InformacionCuentas extends Component {
             setTimeout(() => this.setState({ cuentas: cuentas, loading: false }),300);
         })
 }
+prueba(){
+  alert("hola");
+}
   render(){
     const {classes} = this.props;
 
@@ -119,13 +126,20 @@ class InformacionCuentas extends Component {
           <Grid item xs={12} md={4} lg={3}>
                   <List className={classes.demo}>
                   {this.state.cuentas.map((cuenta) => (
-                    <ListItem key={cuenta.id}>
+                    <ListItem button key={cuenta.id}>
                     <ListItemAvatar>
+                    <div onClick={this.prueba}>
                       <Avatar>
                         <FolderIcon />
                       </Avatar>
+                    </div>
                     </ListItemAvatar>
                     <ListItemText primary={cuenta.name} secondary={cuenta.amount +"€"} />
+                    <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete">
+                      <MoreHorizIcon/>
+                    </IconButton>
+                  </ListItemSecondaryAction>
                   </ListItem>
                   ))}
                 </List>
