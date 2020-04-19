@@ -35,12 +35,6 @@ const styles = theme => ({
   toolbar: {
     paddingRight: 24 // keep right padding when drawer closed
   },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(),
-    backgroundColor:red,
-
-  },
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
@@ -57,7 +51,10 @@ const styles = theme => ({
       duration: theme.transitions.duration.enteringScreen
     }),
     flexGrow: 1,
-    marginLeft: 0
+    marginLeft: theme.spacing(9),
+    [theme.breakpoints.down("sm")]: {
+      marginLeft: theme.spacing(0)
+    }
   },
   paper: {
     padding: theme.spacing(2),
@@ -70,11 +67,12 @@ const styles = theme => ({
   },
   demo: {
     width: '100%',
-    maxWidth: 360,
+    //maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
     position: 'relative',
     overflow: 'auto',
-    maxHeight: '80vh',
+    height: '100vh',
+    maxHeight: '100%',
   },
   title: {
     margin: theme.spacing(0, 0, 2)
@@ -129,14 +127,13 @@ class InformacionCuentas extends Component {
       <Hidden smDown>
         <div className={classes.appBarSpacer} />
       </Hidden>
-      <Container maxWidth="lg" className={classes.container}>
-        <Grid container spacing={3}   >
+        <Grid container spacing={0}   >
           {/* Chart 
           <Grid item xs={12} md={8} lg={8} style={{height:"100%"}}>
             <Paper className={fixedHeightPaper}>hola</Paper>
           </Grid>*/}
           {/* Recent Deposits */}
-          <Grid item xs={12} md={4} lg={4} style={{height: '80vh'}}>
+          <Grid item xs={12} md={4} lg={3}>
                   <List className={classes.demo}>
                   {this.state.cuentas.map((cuenta) => (
                     <ListItem key={cuenta.id}>
@@ -151,8 +148,7 @@ class InformacionCuentas extends Component {
                 </List>
           </Grid>
         </Grid>
-      </Container>
-    </main>
+        </main>
   );
   }
   

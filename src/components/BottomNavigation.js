@@ -13,6 +13,7 @@ import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
 
 const useStyles = makeStyles((theme) =>({
   navBottom: {
+    zIndex: theme.zIndex.drawer + 1,
     width: '100%',
     position: 'fixed',
     bottom: theme.spacing(0),

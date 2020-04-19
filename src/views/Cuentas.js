@@ -9,8 +9,8 @@ import { withStyles } from "@material-ui/core";
 
 const styles = theme => ({
   root: {
-    display: "flex",
-    height: '100vh'
+    //display: "flex",
+    //height: '100vh'
     //flexGrow: 1
   }
 });
