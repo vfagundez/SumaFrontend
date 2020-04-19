@@ -127,6 +127,7 @@ class NavBar extends Component {
     let history = useHistory();
     history.push(path);
   }
+  //Funcion que pone el nombre de la pagina actual en la barra de navegacion
   obtenerRuta(){
     var pathname = window.location.pathname;
     pathname = pathname.slice(1);

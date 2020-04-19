@@ -1,29 +1,17 @@
 import React, { Component } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
-import clsx from "clsx";
 import {
   Hidden,
   ListItem,
   ListItemAvatar,
   Avatar,
   List,
-  GridList,
   withStyles
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import FolderIcon from "@material-ui/icons/Folder";
-import DeleteIcon from "@material-ui/icons/Delete";
 import ListItemText from "@material-ui/core/ListItemText";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import IconButton from "@material-ui/core/IconButton";
-import { FixedSizeList } from "react-window";
-import PropTypes from "prop-types";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { red } from "@material-ui/core/colors";
+import elijaCuenta from "./../assets/elijacuenta.PNG";
 
 const drawerWidth = 240;
 const styles = theme => ({
@@ -71,7 +59,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     position: 'relative',
     overflow: 'auto',
-    height: '100vh',
+    height: '100%',
     maxHeight: '100%',
   },
   title: {
@@ -128,11 +116,6 @@ class InformacionCuentas extends Component {
         <div className={classes.appBarSpacer} />
       </Hidden>
         <Grid container spacing={0}   >
-          {/* Chart 
-          <Grid item xs={12} md={8} lg={8} style={{height:"100%"}}>
-            <Paper className={fixedHeightPaper}>hola</Paper>
-          </Grid>*/}
-          {/* Recent Deposits */}
           <Grid item xs={12} md={4} lg={3}>
                   <List className={classes.demo}>
                   {this.state.cuentas.map((cuenta) => (
@@ -147,6 +130,15 @@ class InformacionCuentas extends Component {
                   ))}
                 </List>
           </Grid>
+          <Hidden smDown>
+            <Grid container xs={12} md={8} lg={9} justify="center" alignItems="center">
+                    <img src={elijaCuenta} alt="elija cuenta" height="200" weight="200"/>
+                    <div>
+                    <Typography variant="h6">No hay movimientos</Typography>
+                    <Typography variant="h7">Selecciona una cuenta para ver sus movimientos</Typography>
+                    </div>
+            </Grid>
+          </Hidden>
         </Grid>
         </main>
   );
