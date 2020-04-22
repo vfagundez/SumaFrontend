@@ -19,6 +19,7 @@ import { light, dark } from "./theme";
 
 
 
+
 function App() {
   //Comprobamos la elección del tema en el dispositivo del usuario
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');

@@ -26,6 +26,8 @@ import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 import Button from "@material-ui/core/Button";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
 import {
   TextField,
   Grid,
@@ -64,6 +66,8 @@ export default function FloatButton() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [distribution, setDistribution] = React.useState(
     JSON.parse(sessionStorage.getItem("userData")).distribution
   );
@@ -131,7 +135,7 @@ export default function FloatButton() {
       </SpeedDial>
       {/**CREAR NUEVA CUENTA */}
       <Dialog
-        fullScreen
+        fullScreen={fullScreen}
         open={open1}
         onClose={handleClose}
         TransitionComponent={Transition}
