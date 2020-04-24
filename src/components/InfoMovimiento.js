@@ -27,6 +27,9 @@ const styles = theme => ({
     //backgroundColor: 'blue',//theme.palette.background.paper,
     position: "relative",
     overflow: "auto",
+    [theme.breakpoints.up('md')]: {
+      height: 'calc(100vh - 64px)',
+    },
     height: "100vh",
     maxHeight: "100%"
   },
@@ -137,9 +140,6 @@ class InfoMovimiento extends Component {
     return (
       <Grid container xs={12} md={"true"} lg={"true"} className={classes.demo}>
         <div className={classes.root}>
-          <Hidden smDown>
-            <div className={classes.appBarSpacer} />
-          </Hidden>
           {/**La barra de opciones del movimiento */}
           <AppBar position="static" color="transparent" elevation={0}>
             <Toolbar>

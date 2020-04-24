@@ -19,6 +19,7 @@ import List from "@material-ui/core/List";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   Typography,
   withStyles,
@@ -28,15 +29,14 @@ import {
   useMediaQuery
 } from "@material-ui/core";
 
-
-const drawerWidth = 240;//Tamaño maximo del menu lateral
+const drawerWidth = 240; //Tamaño maximo del menu lateral
 const styles = theme => ({
   root: {
     display: "flex"
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    borderBottom:"1px solid #000",
+    minHeight:'64px',
   },
   drawer: {
     width: drawerWidth,
@@ -59,6 +59,14 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen
     })
+  },
+  drawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: "flex-end"
   },
   drawerPaperClose: {
     overflowX: "hidden",
@@ -96,13 +104,15 @@ class NavBar extends Component {
     this.state = {
       redirect: false,
       anchorEl: null,
-      open: this.props.open
+      open: this.props.open,
+      open1: this.props.open1
     };
     this.logout = this.logout.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
     this.obtenerRuta = this.obtenerRuta.bind(this);
+    this.handleDrawerMobileOpen = this.handleDrawerMobileOpen.bind(this);
   }
   //isMobile = useMediaQuery(this.theme.breakpoints.down("xs"));
   //Funcion encargada de finalizar la sesión
@@ -122,22 +132,25 @@ class NavBar extends Component {
     this.props.updateOpen(event);
     this.setState({ open: !this.state.open });
   }
+  handleDrawerMobileOpen(event) {
+    this.setState({ open1: !this.state.open1 });
+  }
+
   handleRedirect(site) {
-    let path= '/movimientos';
+    let path = "/movimientos";
     let history = useHistory();
     history.push(path);
   }
   //Funcion que pone el nombre de la pagina actual en la barra de navegacion
-  obtenerRuta(){
+  obtenerRuta() {
     var pathname = window.location.pathname;
     pathname = pathname.slice(1);
     pathname = pathname.charAt(0).toUpperCase() + pathname.slice(1);
-    if(pathname=== "")
-    {
-        pathname="Dashboard";
+    if (pathname === "") {
+      pathname = "Dashboard";
     }
     return pathname;
-}
+  }
 
   render() {
     const { classes } = this.props;
@@ -149,17 +162,35 @@ class NavBar extends Component {
       <div>
         <Hidden smDown>
         {/*BARRA DE NAVEGACIÓN*/}
-        <AppBar position="fixed" className={classes.appBar} color="primary" elevation={0} >
-          <Toolbar>
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="menu"
-              onClick={this.handleDrawerOpen}
-            >
-              <MenuIcon />
-            </IconButton>
+        <AppBar
+          position="fixed"
+          className={classes.appBar}
+          color="white"
+          elevation={0}
+        >
+          <Toolbar style={{minHeight:'64px'}}>
+            <Hidden smDown>
+              <IconButton
+                edge="start"
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="menu"
+                onClick={this.handleDrawerOpen}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Hidden>
+            <Hidden smUp>
+              <IconButton
+                edge="start"
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="menu"
+                onClick={this.handleDrawerMobileOpen}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Hidden>
 
             <Typography variant="h6" className={classes.title}>
               <Hidden smDown>{this.obtenerRuta()}</Hidden>
@@ -207,10 +238,11 @@ class NavBar extends Component {
               </Menu>
             </div>
           </Toolbar>
+          <Divider orientation="horizontal" />
         </AppBar>
 
-        {/*MENU DE NAVEGACIÓN*/}
-        
+        {/*MENU DE NAVEGACIÓN PARA ORDENADOR*/}
+        <Hidden smDown>
           <Drawer
             variant="permanent"
             classes={{
@@ -223,29 +255,97 @@ class NavBar extends Component {
           >
             <Toolbar />
             <List className={classes.menuLateral}>
-                <ListItem button key="Dashboard" onClick={event =>  window.location.href='/'}>
-                  <ListItemIcon>
-                    <DashboardIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Panel Principal" />
-                </ListItem>
+              <ListItem
+                button
+                key="Dashboard"
+                onClick={event => (window.location.href = "/")}
+              >
+                <ListItemIcon>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Panel Principal" />
+              </ListItem>
 
-                <ListItem button key="Cuentas" onClick={event =>  window.location.href='/cuentas'}>
-                  <ListItemIcon>
-                    <AccountBalanceWalletIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Cuentas" />
-                </ListItem>
+              <ListItem
+                button
+                key="Cuentas"
+                onClick={event => (window.location.href = "/cuentas")}
+              >
+                <ListItemIcon>
+                  <AccountBalanceWalletIcon />
+                </ListItemIcon>
+                <ListItemText primary="Cuentas" />
+              </ListItem>
 
-                <ListItem button key="Movimientos" onClick={event =>  window.location.href='/movimientos'}>
-                  <ListItemIcon>
-                    <CompareArrowsIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Movimientos" />
-                </ListItem>
+              <ListItem
+                button
+                key="Movimientos"
+                onClick={event => (window.location.href = "/movimientos")}
+              >
+                <ListItemIcon>
+                  <CompareArrowsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Movimientos" />
+              </ListItem>
             </List>
             <Divider />
           </Drawer>
+        </Hidden>
+        {/*MENU DE NAVEGACIÓN PARA MOVIL*/}
+        <Hidden smUp>
+          <Drawer
+            classes={{
+              paper: clsx(
+                classes.drawerPaper,
+                !this.state.open1 && classes.drawerPaperClose
+              )
+            }}
+            open={this.state.open1}
+          >
+            
+            <div className={classes.drawerHeader}>
+              <IconButton onClick={this.handleDrawerMobileOpen}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </div>
+            <Divider />
+            <List className={classes.menuLateral}>
+              <ListItem
+                button
+                key="Dashboard"
+                onClick={event => (window.location.href = "/")}
+              >
+                <ListItemIcon>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Panel Principal" />
+              </ListItem>
+
+              <ListItem
+                button
+                key="Cuentas"
+                onClick={event => (window.location.href = "/cuentas")}
+              >
+                <ListItemIcon>
+                  <AccountBalanceWalletIcon />
+                </ListItemIcon>
+                <ListItemText primary="Cuentas" />
+              </ListItem>
+
+              <ListItem
+                button
+                key="Movimientos"
+                onClick={event => (window.location.href = "/movimientos")}
+              >
+                <ListItemIcon>
+                  <CompareArrowsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Movimientos" />
+              </ListItem>
+            </List>
+            <Divider />
+          </Drawer>
+        </Hidden>
         </Hidden>
       </div>
     );

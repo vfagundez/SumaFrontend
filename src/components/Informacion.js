@@ -6,6 +6,9 @@ import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import clsx from 'clsx';
 import { Hidden } from '@material-ui/core';
+import {
+  PieChart, Pie, Legend, Tooltip,
+} from 'recharts';
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) =>({
 
@@ -55,6 +58,13 @@ const useStyles = makeStyles((theme) =>({
 export default function Informacion(props) {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const data01 = [{name: 'Group A', value: 400}, {name: 'Group B', value: 300},
+                  {name: 'Group C', value: 300}, {name: 'Group D', value: 200},
+                  {name: 'Group E', value: 278}, {name: 'Group F', value: 189}]
+
+const data02 = [{name: 'Group A', value: 2400}, {name: 'Group B', value: 4567},
+                  {name: 'Group C', value: 1398}, {name: 'Group D', value: 9800},
+                  {name: 'Group E', value: 3908}, {name: 'Group F', value: 4800}];
   return (
 
     <main className={
@@ -75,7 +85,10 @@ export default function Informacion(props) {
         {/* Recent Deposits */}
         <Grid item xs={12} md={4} lg={3}>
           <Paper className={fixedHeightPaper}>
-            hola
+          <PieChart width={250} height={200}>
+        <Pie isAnimationActive={false} data={data01} cx={125} cy={100} outerRadius={80} fill="#8884d8" label/>
+        <Tooltip/>
+       </PieChart>
           </Paper>
         </Grid>
         {/* Recent Orders */}

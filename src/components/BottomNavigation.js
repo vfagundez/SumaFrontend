@@ -10,6 +10,7 @@ import { Hidden } from '@material-ui/core';
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const useStyles = makeStyles((theme) =>({
   navBottom: {
@@ -32,9 +33,10 @@ export default function BottomNav() {
   return (
     <Hidden mdUp>
     <BottomNavigation value={value} onChange={handleChange} className={classes.navBottom}>
-      <BottomNavigationAction label="Panel Incio" value="" icon={<DashboardIcon />} />
+      <BottomNavigationAction label="Panel Inicio" value="" icon={<DashboardIcon />} />
       <BottomNavigationAction label="Movimientos" value="movimientos" icon={<CompareArrowsIcon  />} />
       <BottomNavigationAction label="Cuentas" value="cuentas" icon={<AccountBalanceWalletIcon  />}  />
+      <BottomNavigationAction label="Usuario" value="usuario" icon={<AccountCircleIcon  />}  />
     </BottomNavigation>
     </Hidden>
   );

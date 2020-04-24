@@ -10,7 +10,9 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Divider,
-  useTheme
+  useTheme,
+  AppBar,
+  Toolbar
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import FolderIcon from "@material-ui/icons/Folder";
@@ -22,6 +24,8 @@ import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import TrendingDownIcon from '@material-ui/icons/TrendingDown';
 import InfoMovimiento from './InfoMovimiento';
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 const drawerWidth = 240;
 const styles = theme => ({
   navBottom: {
@@ -36,6 +40,9 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     overflow: "auto",
+    [theme.breakpoints.up('md')]: {
+      marginTop: '64px',
+    },
     marginLeft: drawerWidth,
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
@@ -43,6 +50,10 @@ const styles = theme => ({
     })
   },
   contentShift: {
+    //Si estamos en un ordenador incluimos un espacio para colocar la barra de navegacion
+    [theme.breakpoints.up('md')]: {
+      marginTop: '64px',
+    },
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
@@ -52,6 +63,12 @@ const styles = theme => ({
     [theme.breakpoints.down("sm")]: {
       marginLeft: theme.spacing(0)
     }
+  },
+  title: {
+    flexGrow: 1
+  },
+  menuButton: {
+    marginRight: theme.spacing(0)
   },
   paper: {
     padding: theme.spacing(2),
@@ -68,7 +85,22 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     position: "relative",
     overflow: "auto",
+    [theme.breakpoints.up('md')]: {
+      height: 'calc(100vh - 64px)',
+    },
     height: "100vh",
+    maxHeight: "100%"
+  },
+  demo2: {
+    width: "100%",
+    //maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+    position: "relative",
+    overflow: "auto",
+    [theme.breakpoints.up('md')]: {
+      height: 'calc(100vh - 128px)',
+    },
+    height: 'calc(100vh - 64px)',
     maxHeight: "100%"
   },
   title: {
@@ -131,7 +163,14 @@ class InformacionCuentas extends Component {
     alert("hola");
   }
   handleCuenta(key,numero) {
-    this.setState({ cuenta: !this.state.cuenta });
+    if(numero ==0)
+    {
+
+      this.setState({ cuenta: !this.state.cuenta });
+    }else{
+
+      this.setState({ cuenta: true });
+    }
     this.setState({cuentakey: numero});
     if(this.state.cuenta==false){
       this.setState({movimiento: false})
@@ -140,8 +179,17 @@ class InformacionCuentas extends Component {
     console.log(numero);
   }
   handleMovimiento(key,numero){
-    this.setState({movimiento: !this.state.movimiento});
+    console.log(numero);
+    if(numero == 0){
+      
+      this.setState({movimiento: !this.state.movimiento});
+    }else{
+      this.setState({movimiento: !this.state.movimiento});
+      //this.setState({movimiento: false});
+      //this.setState({movimiento: true});
+    }
     this.setState({movimientokey:numero});
+    console.log(this.state.movimientokey);
     //Dado que hemos podido borrar un movimiento
     this.componentDidMount();//actualizamos los datos
   }
@@ -250,11 +298,22 @@ class InformacionCuentas extends Component {
       return (
         <>
         <Grid item xs={12} md={3} lg={3}>
-          
-          <List className={classes.demo}>
-          <Hidden smDown>
-                <div className={classes.appBarSpacer} />
-              </Hidden>
+          {/**La barra de opciones del movimiento */}
+          <AppBar position="static" color="white" elevation={0}>
+            <Toolbar>
+                {/**Boton para cerrar la información del movimiento */}
+              <IconButton
+                edge="start"
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="menu"
+                onClick={(e)=> this.handleCuenta(e,0)}
+              >
+                <ArrowBackIcon />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <List className={classes.demo2}>
             {this.state.cuentas.map(cuenta => {
               if(cuenta.id==numeroCuenta)
               {
@@ -298,9 +357,6 @@ class InformacionCuentas extends Component {
           <>
           <Grid item xs={12} md={3} lg={3}>
           <List className={classes.demo}>
-            <Hidden smDown>
-              <div className={classes.appBarSpacer} />
-            </Hidden>
             {this.state.cuentas.map(cuenta => (
               <ListItem
                 button
