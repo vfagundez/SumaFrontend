@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
@@ -36,7 +36,9 @@ import {
   Checkbox,
   Slider,
   FormHelperText,
-  Avatar
+  Avatar,
+  Switch,
+  MenuItem
 } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
@@ -132,17 +134,34 @@ function ColorSelected({ color }) {
 }
 export default function FloatButton() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const [open1, setOpen1] = React.useState(false);
+  const [open, setOpen] = React.useState(false);//PARA DESPLEGAR LAS OPCIONES DEL BOTON
+  const [open1, setOpen1] = React.useState(false);//PARA NUEVA CUENTA
+  const [open2, setOpen2] = React.useState(false);//PARA NUEVO MOVIMIENTO
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [distribution, setDistribution] = React.useState(
     JSON.parse(sessionStorage.getItem("userData")).distribution
   );
+  const [cuentas, setCuentas] = React.useState([]);
   const [error, setError] = React.useState(false);
   const [mensajeError, setMensajeError] = React.useState("");
   const [name, setName] = React.useState();
+  const [description, setDescription] = React.useState();
+  const [amount, setAmount] = React.useState(0);
   const [selectedColor, setSelectedColor] = React.useState(1);//Para seleccionar el color de la cuenta
+  const [cuentaElegida, setCuentaElegida] = React.useState(0);
+  const [ingreso, setIngreso] = React.useState(false);
+
+
+  
+  const handleIngreso = () =>{
+    setIngreso(!ingreso);
+  }
+  //Funcion para establecer la cuenta elegida para el determinado movimiento
+  const handleCuentaElegida = (event) =>{
+    setCuentaElegida(event.target.value);
+    //console.log("El event " +event.target.value);
+  }
 
   const handleNCuentaOpen = () => {
     setOpen1(true);
@@ -150,6 +169,71 @@ export default function FloatButton() {
   const handleNCuentaClose = () => {
     setOpen1(false);
   };
+  const handleNMovimientoOpen = () => {
+    setOpen2(true);
+  };
+  const handleNMovimientoClose = () => {
+    setOpen2(false);
+  };
+   //obtener las cuentas del usuario equivalente a componentdidmount
+  useEffect(() =>{
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer " + JSON.parse(sessionStorage.getItem("userData")).access_token);
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+    fetch("v1/cuenta", requestOptions)
+      .then(response => {
+        return response.json();
+      })
+      .then(lasCuentas => {
+        setCuentas(lasCuentas);
+        //console.log(cuentas);
+      });
+  },[]);
+  //Funcion para crear un nuevo movimiento
+  const crearMovimiento = () => {
+    if(amount <= 0)
+    {
+      setError(true);
+      setMensajeError(
+        "La cantidad introducida no es valida, debe introducir un numero positivo"
+      );
+    }else {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append(
+        "Authorization",
+        "Bearer " + JSON.parse(sessionStorage.getItem("userData")).access_token
+      );
+
+      var raw = JSON.stringify({
+        name: name,
+        description: description,
+        idCuenta: cuentaElegida,
+        amount: ingreso ? amount: -amount,
+      });
+      //console.log(raw);
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+      };
+
+      fetch("v1/movimiento/create", requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log("error", error));
+      setOpen2(false);
+      window.location.reload();
+      //window.location.href= '/cuentas'
+    }
+  }
+  //Funcion para crear una nueva cuenta
   const crearCuenta = () => {
     if (distribution <= 0) {
       setError(true);
@@ -190,9 +274,6 @@ export default function FloatButton() {
       window.location.href='/cuentas'
     }
   };
-  const handleNMovimiento = () => {
-    setOpen(false);
-  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -226,7 +307,272 @@ export default function FloatButton() {
             return '#52D0A1';  //Azul Verdoso
         }
   }
+  /**FUNCION PARA CREAR UNA NUEVA CUENTA */
+  const crearNuevaCuenta = () =>{
+    return (
+      <Dialog
+      fullScreen={fullScreen}
+      maxWidth="sm"
+      fullWidth
+      open={open1}
+      onClose={handleClose}
+      TransitionComponent={Transition}
+    >
+      <AppBar className={classes.appBar}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={handleNCuentaClose}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography variant="h6" className={classes.title}>
+            Nueva Cuenta
+          </Typography>
+          <Button autoFocus color="inherit" onClick={crearCuenta}>
+            guardar
+          </Button>
+        </Toolbar>
+      </AppBar>
+
+      <Grid container spacing={3} className={classes.grid} justify="center">
+          <Grid item xs={2} justify="center">
+            <Avatar className={classes.avatar} style={{backgroundColor: elegircolor(selectedColor)}}>
+              <AccountBalanceWalletIcon />
+            </Avatar>
+          </Grid>
+        <Grid item xs={10}>
+          <TextField
+            required
+            id="name"
+            error={error}
+            label="Nombre de Cuenta"
+            fullWidth
+            onChange={e => {
+              setName(e.target.value);
+              //console.log(name);
+            }}
+          />
+        </Grid>
+        {/**LA DESCRIPCIÓN DE LA CUENTA */}
+        <Grid item xs={12}>
+          <TextField
+            multiline
+            required
+            error={error}
+            id="description"
+            label="Descripción de la cuenta"
+            fullWidth
+            onChange={e => {
+              setName(e.target.value);
+              //console.log(name);
+            }}
+          />
+        </Grid>
+        
+        {/**ELEGIR CANTIDAD APORTADA A LA CUENTA */}
+        <Grid item xs={12}>
+          <Typography id="discrete-slider-always" gutterBottom>
+            Porcentaje de Ingresos asociado
+          </Typography>
+          <div className={classes.appBarSpacer}></div>
+          <Slider
+            name="distribution"
+            defaultValue={
+              JSON.parse(sessionStorage.getItem("userData")).distribution
+            }
+            aria-labelledby="discrete-slider-always"
+            step={5}
+            valueLabelDisplay="on"
+            max={JSON.parse(sessionStorage.getItem("userData")).distribution}
+            onChange={(e, newValue) => {
+              setDistribution(newValue);
+              //console.log(distribution);
+            }}
+          />
+        </Grid>
+        {/**ELEGIR COLOR DE LA CUENTA */}
+        <Grid item xs={12}>
+        <Typography id="discrete-slider-always" gutterBottom>
+            Color de la cuenta
+          </Typography>
+          <Grid container spacing={5}>
+          <Grid item>
+          <ColorItem
+            key={1}
+            color="#29282C"
+            isChecked={selectedColor ===1}
+            onClick={() => onSelectColor(1)}
+          />
+          </Grid>
+          <Grid item>
+          <ColorItem
+            key={2}
+            color="#6B2C91"
+            isChecked={selectedColor ===2}
+            onClick={() => onSelectColor(2)}
+          />
+          </Grid>
+          <Grid item>
+          <ColorItem
+            key={3}
+            color="#F9A825"
+            isChecked={selectedColor ===3}
+            onClick={() => onSelectColor(3)}
+          />
+          </Grid>
+          <Grid item>
+          <ColorItem
+            key={4}
+            color="#A1BF5B"
+            isChecked={selectedColor ===4}
+            onClick={() => onSelectColor(4)}
+          />
+          </Grid>
+          <Grid item>
+          <ColorItem
+            key={5}
+            color="#273B89"
+            isChecked={selectedColor ===5}
+            onClick={() => onSelectColor(5)}
+          />
+          </Grid>
+          <Grid item>
+          <ColorItem
+            key={6}
+            color="#F15A2B"
+            isChecked={selectedColor ===6}
+            onClick={() => onSelectColor(6)}
+          />
+          </Grid>
+          <Grid item>
+          <ColorItem
+            key={7}
+            color="#52D0A1"
+            isChecked={selectedColor ===7}
+            onClick={() => onSelectColor(7)}
+          />
+          </Grid>
+          </Grid>
+        
+        </Grid>
+        <Grid item xs={12}>
+          <FormHelperText error={error}>{mensajeError}</FormHelperText>
+        </Grid>
+      </Grid>
+    </Dialog>
+    );
+  }
+  /**FUNCION PARA CREAR UN NUEVO MOVIMIENTO */
+  const crearNuevoMovimiento = () =>{
+    return (
+      <Dialog
+      fullScreen={fullScreen}
+      maxWidth="sm"
+      fullWidth
+      open={open2}
+      onClose={handleClose}
+      TransitionComponent={Transition}
+    >
+      <AppBar className={classes.appBar}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={handleNMovimientoClose}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography variant="h6" className={classes.title}>
+            Nuevo {ingreso ? "Ingreso":"Gasto"}
+          </Typography>
+          <Button autoFocus color="inherit" onClick={crearMovimiento}>
+            guardar
+          </Button>
+        </Toolbar>
+      </AppBar>
+
+      <Grid container spacing={3} className={classes.grid} justify="center">
+        <Grid item xs={12}>
+          <TextField
+            required
+            id="name"
+            label="Nombre del Movimiento"
+            fullWidth
+            onChange={e => {
+              setName(e.target.value);
+              //console.log(name);
+            }}
+          />
+        </Grid>
+        {/**LA DESCRIPCIÓN DEL MOVIMIENTO */}
+        <Grid item xs={12}>
+          <TextField
+            multiline
+            required
+            id="description"
+            label="Descripción del movimiento"
+            fullWidth
+            onChange={e => {
+              setDescription(e.target.value);
+              //console.log(name);
+            }}
+          />
+        </Grid>
+        
+        {/**INTRODUCIR CANTIDAD DEL MOVIMIENTO */}
+        <Grid item xs={12}>
+        <TextField
+          fullWidth
+          error={error}
+          id="filled-number"
+          label="Cantidad"
+          type="number"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          onChange={e => {
+            setAmount(e.target.value);
+            //console.log(name);
+          }}
+          helperText="Introduce un numero positivo"
+        />
+        </Grid>
+        <Grid item xs={2}>
+          <div style={{marginTop:'15px'}}>
+          <Switch value={ingreso} onClick={handleIngreso}/>
+          </div>
+        </Grid>
+        {/**INTRODUCIR CUENTA ASOCIADA*/}
+        <Grid item xs={10}>
+        {ingreso ? (<></>): (
+          <TextField
+          fullWidth
+          id="standard-select-currency"
+          select
+          label="Selecciona la cuenta asociada"
+          value={cuentaElegida}
+          onChange={handleCuentaElegida}
+        >
+          {cuentas.map((option) => (
+            <MenuItem key={option.id} value={option.id}>
+              {option.name}
+            </MenuItem>
+          ))}
+        </TextField>
+        )}
+        
+        </Grid>
+
+      </Grid>
+    </Dialog>
+    );
+  }
   return (
+    
     <div className={classes.root}>
       <SpeedDial
         ariaLabel="SpeedDial example"
@@ -241,7 +587,7 @@ export default function FloatButton() {
           key="Nuevo Movimiento"
           icon={<CompareArrowsIcon />}
           tooltipTitle={"Nuevo Movimiento"}
-          onClick={handleNMovimiento}
+          onClick={handleNMovimientoOpen}
         />
         <SpeedDialAction
           key="Nueva Cuenta"
@@ -251,160 +597,8 @@ export default function FloatButton() {
         />
         ))}
       </SpeedDial>
-      {/**CREAR NUEVA CUENTA */}
-      <Dialog
-        fullScreen={fullScreen}
-        maxWidth="sm"
-        fullWidth
-        open={open1}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-      >
-        <AppBar className={classes.appBar}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleNCuentaClose}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              Nueva Cuenta
-            </Typography>
-            <Button autoFocus color="inherit" onClick={crearCuenta}>
-              save
-            </Button>
-          </Toolbar>
-        </AppBar>
-
-        <Grid container spacing={3} className={classes.grid} justify="center">
-            <Grid item xs={2} justify="center">
-              <Avatar className={classes.avatar} style={{backgroundColor: elegircolor(selectedColor)}}>
-                <AccountBalanceWalletIcon />
-              </Avatar>
-            </Grid>
-          <Grid item xs={10}>
-            <TextField
-              required
-              id="name"
-              error={error}
-              label="Nombre de Cuenta"
-              fullWidth
-              onChange={e => {
-                setName(e.target.value);
-                console.log(name);
-              }}
-            />
-          </Grid>
-          {/**LA DESCRIPCIÓN DE LA CUENTA */}
-          <Grid item xs={12}>
-            <TextField
-              multiline
-              required
-              error={error}
-              id="description"
-              label="Descripción de la cuenta"
-              fullWidth
-              onChange={e => {
-                setName(e.target.value);
-                console.log(name);
-              }}
-            />
-          </Grid>
-          
-          {/**ELEGIR CANTIDAD APORTADA A LA CUENTA */}
-          <Grid item xs={12}>
-            <Typography id="discrete-slider-always" gutterBottom>
-              Porcentaje de Ingresos asociado
-            </Typography>
-            <div className={classes.appBarSpacer}></div>
-            <Slider
-              name="distribution"
-              defaultValue={
-                JSON.parse(sessionStorage.getItem("userData")).distribution
-              }
-              aria-labelledby="discrete-slider-always"
-              step={5}
-              valueLabelDisplay="on"
-              max={JSON.parse(sessionStorage.getItem("userData")).distribution}
-              onChange={(e, newValue) => {
-                setDistribution(newValue);
-                console.log(distribution);
-              }}
-            />
-          </Grid>
-          {/**ELEGIR COLOR DE LA CUENTA */}
-          <Grid item xs={12}>
-          <Typography id="discrete-slider-always" gutterBottom>
-              Color de la cuenta
-            </Typography>
-            <Grid container spacing={5}>
-            <Grid item>
-            <ColorItem
-              key={1}
-              color="#29282C"
-              isChecked={selectedColor ===1}
-              onClick={() => onSelectColor(1)}
-            />
-            </Grid>
-            <Grid item>
-            <ColorItem
-              key={2}
-              color="#6B2C91"
-              isChecked={selectedColor ===2}
-              onClick={() => onSelectColor(2)}
-            />
-            </Grid>
-            <Grid item>
-            <ColorItem
-              key={3}
-              color="#F9A825"
-              isChecked={selectedColor ===3}
-              onClick={() => onSelectColor(3)}
-            />
-            </Grid>
-            <Grid item>
-            <ColorItem
-              key={4}
-              color="#A1BF5B"
-              isChecked={selectedColor ===4}
-              onClick={() => onSelectColor(4)}
-            />
-            </Grid>
-            <Grid item>
-            <ColorItem
-              key={5}
-              color="#273B89"
-              isChecked={selectedColor ===5}
-              onClick={() => onSelectColor(5)}
-            />
-            </Grid>
-            <Grid item>
-            <ColorItem
-              key={6}
-              color="#F15A2B"
-              isChecked={selectedColor ===6}
-              onClick={() => onSelectColor(6)}
-            />
-            </Grid>
-            <Grid item>
-            <ColorItem
-              key={7}
-              color="#52D0A1"
-              isChecked={selectedColor ===7}
-              onClick={() => onSelectColor(7)}
-            />
-            </Grid>
-            </Grid>
-          
-          </Grid>
-          <Grid item xs={12}>
-            <FormHelperText error={error}>{mensajeError}</FormHelperText>
-          </Grid>
-        </Grid>
-      </Dialog>
+      {crearNuevaCuenta()} 
+      {crearNuevoMovimiento()} 
     </div>
   );
 }

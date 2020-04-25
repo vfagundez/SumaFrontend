@@ -20,13 +20,15 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import logo from "../Suma.png";
 import {
   Typography,
   withStyles,
   SvgIcon,
   Box,
   Hidden,
-  useMediaQuery
+  useMediaQuery,
+  Avatar
 } from "@material-ui/core";
 
 const drawerWidth = 240; //Tamaño maximo del menu lateral
@@ -191,10 +193,21 @@ class NavBar extends Component {
                 <MenuIcon />
               </IconButton>
             </Hidden>
-
-            <Typography variant="h6" className={classes.title}>
+              
+              <img
+              src={logo}
+              alt="elija cuenta"
+              height="20"
+              weight="20"
+              style={{marginRight:'10px'}}
+            />
+         
+            <div className={classes.title}>
+            <Typography variant="h6" >
               <Hidden smDown>{this.obtenerRuta()}</Hidden>
             </Typography>
+            </div>
+            
             <Hidden mdUp>
               {/*El logo de la aplicación para movil*/}
               <Box className={classes.prueba}>
