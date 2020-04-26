@@ -121,7 +121,8 @@ class InformacionCuentas extends Component {
       cuenta: false, //comprueba si se ha pinchado para mostrar los movimientos de una cuenta
       cuentakey: 0,
       movimiento: false, //comprueba se se ha pinchado para mostrar la info de un movimiento
-      movimientokey: 0
+      movimientokey: 0,
+      todos: false, //indica si se deben mostrar todos los movimientos
     };
     this.prueba = this.prueba.bind(this);
     this.handleCuenta = this.handleCuenta.bind(this);
@@ -163,9 +164,14 @@ class InformacionCuentas extends Component {
   prueba() {
     alert("hola");
   }
+  handleTodosMovimientos(){
+    this.setState({cuenta:true})
+    this.setState({todos:!this.state.todos})
+    console.log(this.state);
+  }
   handleCuenta(key, numero) {
     if (numero == 0) {
-      this.setState({ cuenta: !this.state.cuenta });
+      this.setState({ cuenta: false });
     } else {
       this.setState({ cuenta: true });
     }
@@ -173,8 +179,13 @@ class InformacionCuentas extends Component {
     if (this.state.cuenta == false) {
       this.setState({ movimiento: false });
     }
+    if(this.state.todos == true)
+    {
+      this.setState({todos:false})
+    }
+    
     console.log(this.state);
-    console.log(numero);
+    //console.log(numero);
   }
   handleMovimiento(key, numero) {
     console.log(numero);
@@ -186,7 +197,7 @@ class InformacionCuentas extends Component {
       //this.setState({movimiento: true});
     }
     this.setState({ movimientokey: numero });
-    console.log(this.state.movimientokey);
+    //console.log(this.state.movimientokey);
     //Dado que hemos podido borrar un movimiento
     this.componentDidMount(); //actualizamos los datos
   }
@@ -312,7 +323,7 @@ class InformacionCuentas extends Component {
                   className={classes.menuButton}
                   color="inherit"
                   aria-label="menu"
-                  onClick={e => this.handleCuenta(e, 0)}
+                  onClick={e => this.handleCuenta(e,0)}
                 >
                   <ArrowBackIcon />
                 </IconButton>
@@ -320,7 +331,7 @@ class InformacionCuentas extends Component {
             </AppBar>
             <List className={classes.demo2}>
               {this.state.cuentas.map(cuenta => {
-                if (cuenta.id == numeroCuenta) {
+                if(this.state.todos ==true){//Si esta seleccionado mostrar todos los movimientos
                   return cuenta.movimientos.map(movimiento => (
                     <ListItem
                       button
@@ -349,7 +360,39 @@ class InformacionCuentas extends Component {
                       </ListItemSecondaryAction>
                     </ListItem>
                   ));
+                }else{
+                  if (cuenta.id == numeroCuenta) {
+                    return cuenta.movimientos.map(movimiento => (
+                      <ListItem
+                        button
+                        key={movimiento.id}
+                        onClick={e => this.handleMovimiento(e, movimiento.id)}
+                      >
+                        <ListItemAvatar>
+                          <div onClick={this.prueba}>
+                            <Avatar
+                              style={{
+                                backgroundColor: this.elegircolor(cuenta.color)
+                              }}
+                            >
+                              {this.elegirIcono(movimiento.amount)}
+                            </Avatar>
+                          </div>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={movimiento.name}
+                          secondary={this.acomodarFecha(movimiento.created_at)}
+                        />
+                        <ListItemSecondaryAction>
+                          <ListItemText
+                            secondary={this.ingresoDeuda(movimiento.amount)}
+                          />
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                    ));
+                  }
                 }
+                
               })}
 
               <Hidden smUp>
@@ -384,6 +427,26 @@ class InformacionCuentas extends Component {
             ) : (
               /**Las cuentas del usuario */
               <List className={classes.demo}>
+                 <ListItem
+                    button
+                    key={0}
+                    onClick={e => this.handleTodosMovimientos(e)}
+                  >
+                    <ListItemAvatar>
+                      <div onClick={this.prueba}>
+                        <Avatar
+                          style={{
+                            backgroundColor: 'blue'
+                          }}
+                        >
+                          <AccountBalanceWalletIcon />
+                        </Avatar>
+                      </div>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary="Todos los movimientos"
+                    />
+                  </ListItem>
                 {this.state.cuentas.map(cuenta => (
                   <ListItem
                     button
