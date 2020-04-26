@@ -271,7 +271,8 @@ export default function FloatButton() {
       prevData["distribution"] = prevData["distribution"] - distribution;
       sessionStorage.setItem("userData", JSON.stringify(prevData));
       //console.log(prevData);
-      window.location.href='/cuentas'
+      //window.location.href='/cuentas'
+      //window.location.reload();
     }
   };
   const handleClose = () => {
@@ -366,7 +367,7 @@ export default function FloatButton() {
             label="Descripción de la cuenta"
             fullWidth
             onChange={e => {
-              setName(e.target.value);
+              setDescription(e.target.value);
               //console.log(name);
             }}
           />

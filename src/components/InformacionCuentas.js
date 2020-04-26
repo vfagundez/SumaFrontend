@@ -13,7 +13,7 @@ import {
   useTheme,
   AppBar,
   Toolbar,
-  CircularProgress
+  CircularProgress,
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import FolderIcon from "@material-ui/icons/Folder";
@@ -27,6 +27,10 @@ import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 import InfoMovimiento from "./InfoMovimiento";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
+import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
+import {
+  PieChart, Pie, Legend, Tooltip,Cell,
+} from 'recharts';
 const drawerWidth = 240;
 const styles = theme => ({
   navBottom: {
@@ -187,6 +191,7 @@ class InformacionCuentas extends Component {
     console.log(this.state);
     //console.log(numero);
   }
+  
   handleMovimiento(key, numero) {
     console.log(numero);
     if (numero == 0) {
@@ -253,8 +258,22 @@ class InformacionCuentas extends Component {
     var date = new Date(fecha * 1000);
     return date.toLocaleDateString();
   }
+
+  prepararDatos(cuentas){
+    var data =[];
+    
+    console.log("el data es " + data);
+    cuentas.map( cuenta =>{
+        data.push({"name":cuenta.name,"value": cuenta.XXXXX[0].distribution, "color": this.elegircolor(cuenta.color)});
+    })
+    console.log("el data es " + cuentas);
+    return data;
+  }
   render() {
     const { classes } = this.props;
+    const data01 = [{name: 'Group A', value: 400}, {name: 'Group B', value: 300},
+                  {name: 'Group C', value: 300}, {name: 'Group D', value: 200},
+                  {name: 'Group E', value: 278}, {name: 'Group F', value: 189}]
     const noCuenta = () => {
       return (
         <Hidden smDown>
@@ -266,18 +285,14 @@ class InformacionCuentas extends Component {
             justify="center"
             alignItems="center"
           >
-            <img
-              src={elijaCuenta}
-              alt="elija cuenta"
-              height="200"
-              weight="200"
-            />
-            <div>
-              <Typography variant="h6">No hay movimientos</Typography>
-              <Typography variant="h7">
-                Selecciona una cuenta para ver sus movimientos
-              </Typography>
-            </div>
+            <PieChart width={800} height={500}>
+            <Pie isAnimationActive={true} data={this.prepararDatos(this.state.cuentas)} cx={400} cy={200} outerRadius={150} fill="#8884d8" label>
+                {
+                this.prepararDatos(this.state.cuentas).map((cuenta) => <Cell fill={cuenta.color}/>)
+              }
+            </Pie>
+            <Tooltip/>
+       </PieChart>
           </Grid>
         </Hidden>
       );
@@ -427,26 +442,6 @@ class InformacionCuentas extends Component {
             ) : (
               /**Las cuentas del usuario */
               <List className={classes.demo}>
-                 <ListItem
-                    button
-                    key={0}
-                    onClick={e => this.handleTodosMovimientos(e)}
-                  >
-                    <ListItemAvatar>
-                      <div onClick={this.prueba}>
-                        <Avatar
-                          style={{
-                            backgroundColor: 'blue'
-                          }}
-                        >
-                          <AccountBalanceWalletIcon />
-                        </Avatar>
-                      </div>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Todos los movimientos"
-                    />
-                  </ListItem>
                 {this.state.cuentas.map(cuenta => (
                   <ListItem
                     button
