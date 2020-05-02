@@ -206,7 +206,7 @@ class SignIn extends Component {
             <Grid container>
               <Grid item>
                 <Link href="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  {"¿No tienes una cuenta? Registrate"}
                 </Link>
               </Grid>
             </Grid>

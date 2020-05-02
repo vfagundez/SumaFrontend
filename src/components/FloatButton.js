@@ -192,7 +192,8 @@ export default function FloatButton() {
       .then(lasCuentas => {
         setCuentas(lasCuentas);
         //console.log(cuentas);
-      });
+      })
+      .catch(error => console.log("error", error));
   },[]);
   //Funcion para crear un nuevo movimiento
   const crearMovimiento = () => {
