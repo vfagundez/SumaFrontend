@@ -14,11 +14,10 @@ import {
   AppBar,
   Toolbar,
   CircularProgress,
+  Box
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import FolderIcon from "@material-ui/icons/Folder";
 import ListItemText from "@material-ui/core/ListItemText";
-import elijaCuenta from "./../assets/elijacuenta.PNG";
 import elijamovimiento from "./../assets/elijamovimiento.png";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
@@ -26,11 +25,17 @@ import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import TrendingDownIcon from "@material-ui/icons/TrendingDown";
 import InfoMovimiento from "./InfoMovimiento";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
+import GraficoCuentas from "./GraficoCuentas";
+import ModificarCuenta from "./ModificarCuenta";
+
 import {
-  PieChart, Pie, Legend, Tooltip,Cell,
-} from 'recharts';
+  PieChart,
+  Pie,
+  Legend,
+  Tooltip,
+  Cell,
+  ResponsiveContainer
+} from "recharts";
 const drawerWidth = 240;
 const styles = theme => ({
   navBottom: {
@@ -93,6 +98,24 @@ const styles = theme => ({
     [theme.breakpoints.up("md")]: {
       height: "calc(100vh - 64px)"
     },
+    [theme.breakpoints.down("md")]: {
+      height: "50vh"
+    },
+    height: "100vh",
+    maxHeight: "100%"
+  },
+  modificarCuenta: {
+    width: "100%",
+    //maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+    position: "relative",
+    overflow: "auto",
+    [theme.breakpoints.up("md")]: {
+      height: "calc(100vh - 64px)"
+    },
+    [theme.breakpoints.down("md")]: {
+      height: "100vh"
+    },
     height: "100vh",
     maxHeight: "100%"
   },
@@ -126,7 +149,7 @@ class InformacionCuentas extends Component {
       cuentakey: 0,
       movimiento: false, //comprueba se se ha pinchado para mostrar la info de un movimiento
       movimientokey: 0,
-      todos: false, //indica si se deben mostrar todos los movimientos
+      todos: false //indica si se deben mostrar todos los movimientos
     };
     this.prueba = this.prueba.bind(this);
     this.handleCuenta = this.handleCuenta.bind(this);
@@ -135,6 +158,7 @@ class InformacionCuentas extends Component {
     this.ingresoDeuda = this.ingresoDeuda.bind(this);
     this.acomodarFecha = this.acomodarFecha.bind(this);
     this.handleMovimiento = this.handleMovimiento.bind(this);
+    this.devolverCuentaSeleccionada = this.devolverCuentaSeleccionada.bind(this);
   }
   componentWillMount() {
     var userdata = JSON.parse(sessionStorage.getItem("userData"));
@@ -165,12 +189,21 @@ class InformacionCuentas extends Component {
         );
       });
   }
+  devolverCuentaSeleccionada(keycuenta){
+    let cuentaseleccionada;
+    this.state.cuentas.map(cuenta => {
+      if (cuenta.id == keycuenta) {
+        cuentaseleccionada = cuenta;
+      }
+    });
+    return cuentaseleccionada;
+  }
   prueba() {
     alert("hola");
   }
-  handleTodosMovimientos(){
-    this.setState({cuenta:true})
-    this.setState({todos:!this.state.todos})
+  handleTodosMovimientos() {
+    this.setState({ cuenta: true });
+    this.setState({ todos: !this.state.todos });
     console.log(this.state);
   }
   handleCuenta(key, numero) {
@@ -183,15 +216,14 @@ class InformacionCuentas extends Component {
     if (this.state.cuenta == false) {
       this.setState({ movimiento: false });
     }
-    if(this.state.todos == true)
-    {
-      this.setState({todos:false})
+    if (this.state.todos == true) {
+      this.setState({ todos: false });
     }
-    
+
     console.log(this.state);
     //console.log(numero);
   }
-  
+
   handleMovimiento(key, numero) {
     console.log(numero);
     if (numero == 0) {
@@ -258,45 +290,47 @@ class InformacionCuentas extends Component {
     var date = new Date(fecha * 1000);
     return date.toLocaleDateString();
   }
+  /**
+   * Funcion que adecua los valores de distribucion reales de cuentas a un
+   * formato entendible para el grafico
+   * @param {*} cuentas
+   * 2020.05.10
+   */
+  prepararDatosReales(cuentas) {
+    var data = [];
 
-  prepararDatos(cuentas){
-    var data =[];
-    
     console.log("el data es " + data);
-    cuentas.map( cuenta =>{
-        data.push({"name":cuenta.name,"value": cuenta.XXXXX[0].distribution, "color": this.elegircolor(cuenta.color)});
-    })
+    cuentas.map(cuenta => {
+      data.push({
+        name: cuenta.name,
+        value: cuenta.amount,
+        color: this.elegircolor(cuenta.color)
+      });
+    });
+    console.log("el data es " + cuentas);
+    return data;
+  }
+  /**
+   * Funcion que adecua los valores de distribucion de ingreso en cuentas
+   * a un formato entendible para el grafico
+   * @param {*} cuentas
+   */
+  prepararDatos(cuentas) {
+    var data = [];
+
+    console.log("el data es " + data);
+    cuentas.map(cuenta => {
+      data.push({
+        name: cuenta.name,
+        value: cuenta.XXXXX[0].distribution,
+        color: this.elegircolor(cuenta.color)
+      });
+    });
     console.log("el data es " + cuentas);
     return data;
   }
   render() {
     const { classes } = this.props;
-    const data01 = [{name: 'Group A', value: 400}, {name: 'Group B', value: 300},
-                  {name: 'Group C', value: 300}, {name: 'Group D', value: 200},
-                  {name: 'Group E', value: 278}, {name: 'Group F', value: 189}]
-    const noCuenta = () => {
-      return (
-        <Hidden smDown>
-          <Grid
-            container
-            xs={12}
-            md={7}
-            lg={8}
-            justify="center"
-            alignItems="center"
-          >
-            <PieChart width={800} height={500}>
-            <Pie isAnimationActive={true} data={this.prepararDatos(this.state.cuentas)} cx={400} cy={200} outerRadius={150} fill="#8884d8" label>
-                {
-                this.prepararDatos(this.state.cuentas).map((cuenta) => <Cell fill={cuenta.color}/>)
-              }
-            </Pie>
-            <Tooltip/>
-       </PieChart>
-          </Grid>
-        </Hidden>
-      );
-    };
     const noMovimiento = () => {
       return (
         <Hidden smDown>
@@ -338,7 +372,7 @@ class InformacionCuentas extends Component {
                   className={classes.menuButton}
                   color="inherit"
                   aria-label="menu"
-                  onClick={e => this.handleCuenta(e,0)}
+                  onClick={e => this.handleCuenta(e, 0)}
                 >
                   <ArrowBackIcon />
                 </IconButton>
@@ -346,7 +380,8 @@ class InformacionCuentas extends Component {
             </AppBar>
             <List className={classes.demo2}>
               {this.state.cuentas.map(cuenta => {
-                if(this.state.todos ==true){//Si esta seleccionado mostrar todos los movimientos
+                if (this.state.todos == true) {
+                  //Si esta seleccionado mostrar todos los movimientos
                   return cuenta.movimientos.map(movimiento => (
                     <ListItem
                       button
@@ -375,7 +410,7 @@ class InformacionCuentas extends Component {
                       </ListItemSecondaryAction>
                     </ListItem>
                   ));
-                }else{
+                } else {
                   if (cuenta.id == numeroCuenta) {
                     return cuenta.movimientos.map(movimiento => (
                       <ListItem
@@ -407,7 +442,6 @@ class InformacionCuentas extends Component {
                     ));
                   }
                 }
-                
               })}
 
               <Hidden smUp>
@@ -422,7 +456,7 @@ class InformacionCuentas extends Component {
     /**Funcion que muestra un listado con todas las cuentas del usuario */
     const cuentas = () => {
       return (
-        <>
+        <Box order={{ xs: 2, md: 1, lg: 1 }} clone>
           <Grid item xs={12} md={3} lg={3}>
             {/**Circulo de carga */}
             {this.state.loading ? (
@@ -449,7 +483,7 @@ class InformacionCuentas extends Component {
                     onClick={e => this.handleCuenta(e, cuenta.id)}
                   >
                     <ListItemAvatar>
-                      <div onClick={this.prueba}>
+                  
                         <Avatar
                           style={{
                             backgroundColor: this.elegircolor(cuenta.color)
@@ -457,17 +491,12 @@ class InformacionCuentas extends Component {
                         >
                           <AccountBalanceWalletIcon />
                         </Avatar>
-                      </div>
+                      
                     </ListItemAvatar>
                     <ListItemText
                       primary={cuenta.name}
                       secondary={cuenta.amount + "€"}
                     />
-                    <ListItemSecondaryAction>
-                      <IconButton edge="end" aria-label="delete">
-                        <MoreHorizIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
                   </ListItem>
                 ))}
                 <Hidden smUp>
@@ -476,8 +505,7 @@ class InformacionCuentas extends Component {
               </List>
             )}
           </Grid>
-          <Divider orientation="vertical" flexItem />
-        </>
+        </Box>
       );
     };
     const cuentaNoMov = keycuenta => {
@@ -485,19 +513,24 @@ class InformacionCuentas extends Component {
         <>
           {/**Si se ha seleccionado un movimiento y estamos en un movil se oculta los movimientos de la cuenta */}
           {this.state.movimiento ? (
-            <Hidden smDown>{cuenta(keycuenta)}</Hidden>
+            <Hidden smDown>{/*cuenta(keycuenta)*/}</Hidden>
           ) : (
-            cuenta(keycuenta)
-          )}
-          {/** Y solo se muestra la info del movimiento */}
-          {this.state.movimiento ? (
-            <InfoMovimiento
-              akey={this.state.movimientokey}
-              handleMovimiento={this.handleMovimiento}
-              movimiento={this.state.movimiento}
-            />
-          ) : (
-            noMovimiento()
+            <Box order={{ md: 2, lg: 2, xs: 1 }} clone>
+              <Grid
+                container
+                xs={12}
+                md={"true"}
+                lg={"true"}
+                className={classes.modificarCuenta}
+              >
+                <ModificarCuenta
+                  handleCuenta={this.handleCuenta}
+                  cuentaAbierta={this.devolverCuentaSeleccionada(keycuenta)}
+                />
+              </Grid>
+            </Box>
+
+            /*cuenta(keycuenta)*/
           )}
         </>
       );
@@ -510,7 +543,21 @@ class InformacionCuentas extends Component {
           {/**Si se ha seleccionado una cuenta y estamos en un movil se oculta el menu de cuentas */}
           {this.state.cuenta ? <Hidden smDown>{cuentas()}</Hidden> : cuentas()}
           {/**Si se ha seleccionado un movimiento */}
-          {this.state.cuenta ? cuentaNoMov(this.state.cuentakey) : noCuenta()}
+          {this.state.cuenta ? (
+            cuentaNoMov(this.state.cuentakey)
+          ) : (
+            <Box order={{ md: 2, lg: 2, xs: 1 }} clone>
+              <Grid
+                container
+                xs={12}
+                md={"true"}
+                lg={"true"}
+                className={classes.demo}
+              >
+                <GraficoCuentas data={this.prepararDatos(this.state.cuentas)} />
+              </Grid>
+            </Box>
+          )}
         </Grid>
       </main>
     );
