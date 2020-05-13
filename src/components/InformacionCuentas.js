@@ -317,7 +317,7 @@ class InformacionCuentas extends Component {
    */
   prepararDatos(cuentas) {
     var data = [];
-
+    let prevData = JSON.parse(sessionStorage.getItem("userData"));
     console.log("el data es " + data);
     cuentas.map(cuenta => {
       data.push({
@@ -326,6 +326,13 @@ class InformacionCuentas extends Component {
         color: this.elegircolor(cuenta.color)
       });
     });
+    if(prevData["distribution"]>0){
+      data.push({
+        name: "Por asignar",
+        value: prevData["distribution"],
+        color: 3
+      });
+    }
     console.log("el data es " + cuentas);
     return data;
   }

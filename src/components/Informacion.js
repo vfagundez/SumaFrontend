@@ -6,7 +6,19 @@ import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import clsx from "clsx";
 import { Hidden } from "@material-ui/core";
-import { PieChart, Pie, Legend, Tooltip } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Legend,
+  Tooltip,
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid
+} from "recharts";
+import GraficoIngresosGastos from './Dashboard/GraficoIngresosGastos';
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
   navBottom: {
@@ -71,6 +83,7 @@ export default function Informacion(props) {
     { name: "Group E", value: 3908 },
     { name: "Group F", value: 4800 }
   ];
+  
   return (
     <main className={props.open ? classes.content : classes.contentShift}>
       <Hidden smDown>
@@ -80,7 +93,9 @@ export default function Informacion(props) {
         <Grid container spacing={3}>
           {/* Chart */}
           <Grid item xs={12} md={8} lg={9}>
-            <Paper className={fixedHeightPaper}>hola</Paper>
+            <Paper className={fixedHeightPaper}>
+              <GraficoIngresosGastos/>
+            </Paper>
           </Grid>
           {/* Recent Deposits */}
           <Grid item xs={12} md={4} lg={3}>

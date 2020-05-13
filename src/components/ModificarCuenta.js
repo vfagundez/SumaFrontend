@@ -162,6 +162,10 @@ class ModificarCuenta extends Component {
     this.onSelectColor = this.onSelectColor.bind(this);
     this.ActualizarCuenta = this.ActualizarCuenta.bind(this);
   }
+  establecerDistribucion(valor){
+      this.setState({distribution: valor});
+      console.log(this.state.distribution);
+  }
   //Para cerrar la informacion de la cuenta en cuestion
   volver(e) {
     this.props.handleCuenta(e, 0);
@@ -187,7 +191,7 @@ class ModificarCuenta extends Component {
         distribution: this.state.distribution,
         color: this.state.selectedColor,
       });
-      //console.log(raw);
+      console.log(raw);
       var requestOptions = {
         method: "PUT",
         headers: myHeaders,
@@ -317,7 +321,7 @@ class ModificarCuenta extends Component {
                 this.props.cuentaAbierta.XXXXX[0].distribution +
                 JSON.parse(sessionStorage.getItem("userData")).distribution
               }
-              onChange={this.onChange}
+              onChange={(e,newValue) => {this.establecerDistribucion(newValue)}}
             />
           </Grid>
           {/**ELEGIR COLOR DE LA CUENTA */}
