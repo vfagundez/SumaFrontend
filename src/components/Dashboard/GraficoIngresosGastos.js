@@ -112,7 +112,7 @@ class GraficoCuentas extends Component {
       { mes: "Ene", ahorrado: 0, gastos: 0 },
       { mes: "Feb", ahorrado: 0, gastos: 0 },
       { mes: "Mar", ahorrado: 0, gastos: 0 },
-      { mes: "Abr", ahorrado: 2000, gastos: 0 },
+      { mes: "Abr", ahorrado: 0, gastos: 0 },
       { mes: "May", ahorrado: 0, gastos: 0 },
       { mes: "Jun", ahorrado: 0, gastos: 0 },
       { mes: "Jul", ahorrado: 0, gastos: 0 },
@@ -137,6 +137,9 @@ class GraficoCuentas extends Component {
           dataGrafico[dat.numeroMes].gastos =
             dataGrafico[dat.numeroMes].gastos - dat.valor;
             dataGrafico[dat.numeroMes].ahorrado = dataGrafico[dat.numeroMes].ahorrado+dat.valor;
+            if(dataGrafico[dat.numeroMes].ahorrado < 0){
+              dataGrafico[dat.numeroMes].ahorrado = 0;
+            }
         }
       }
     });
