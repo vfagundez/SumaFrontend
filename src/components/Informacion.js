@@ -19,6 +19,8 @@ import {
   CartesianGrid
 } from "recharts";
 import GraficoIngresosGastos from "./Dashboard/GraficoIngresosGastos";
+import GraficoDistribucionCuentas from "./Dashboard/GraficoDistribucionCuentas"
+import GraficoDistribucionIngresos from "./Dashboard/GraficoDistribucionIngresos"
 const drawerWidth = 240;
 const styles = theme => ({
   navBottom: {
@@ -80,7 +82,7 @@ const styles = theme => ({
     flexDirection: "column"
   },
   fixedHeight: {
-    height: 240
+    height: "45.5vh"
   }
 });
 
@@ -104,15 +106,15 @@ class Informacion extends Component {
         className={this.props.open ? classes.content : classes.contentShift}
       >
         <Grid container spacing={0}>
-          {/* Chart */}
-          <Grid item xs={12} md={8} lg={9}>
+          {/* Recent Deposits */}
+          <Grid item xs={12} md={4} lg={3}>
             <Paper
               elevation={0}
               square
               variant="outlined"
               className={fixedHeightPaper}
             >
-              <GraficoIngresosGastos />
+              <GraficoDistribucionIngresos/>
             </Paper>
           </Grid>
           {/* Recent Deposits */}
@@ -123,31 +125,21 @@ class Informacion extends Component {
               variant="outlined"
               className={fixedHeightPaper}
             >
-              <PieChart width={250} height={200}>
-                <Pie
-                  isAnimationActive={false}
-                  data={data01}
-                  cx={125}
-                  cy={100}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  label
-                />
-                <Tooltip />
-              </PieChart>
+              <GraficoDistribucionCuentas/>
             </Paper>
           </Grid>
-          {/* Recent Orders */}
-          <Grid item xs={12}>
+          {/* Chart */}
+          <Grid item xs={12} md={12} lg={12}>
             <Paper
               elevation={0}
               square
               variant="outlined"
               className={fixedHeightPaper}
             >
-              hola
+              <GraficoIngresosGastos />
             </Paper>
           </Grid>
+          
         </Grid>
       </main>
     );

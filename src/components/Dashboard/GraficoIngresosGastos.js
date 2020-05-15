@@ -65,6 +65,7 @@ class GraficoCuentas extends Component {
           100
         );
       });
+     
   }
   /**
    * Funcion que devuelve el nombre del mes en funcion del numero de mes
@@ -93,6 +94,7 @@ class GraficoCuentas extends Component {
    * @param {*} movimientos 
    */
   prepararDatos(movimientos) {
+    console.log("Los movimientos son" +JSON.stringify(this.state.movimientos)) 
     var data = [];
     let prevData = JSON.parse(sessionStorage.getItem("userData"));
     console.log("el data es " + data);
@@ -144,7 +146,7 @@ class GraficoCuentas extends Component {
       }
     });
 
-    //console.log(dataGrafico);
+    console.log(dataGrafico);
     return dataGrafico;
   }
   /**
@@ -153,50 +155,7 @@ class GraficoCuentas extends Component {
   render() {
     //Constante para poder usar los estilos de styles
     const { classes } = this.props;
-    const data = [
-      {
-        name: "Page A",
-        uv: 4000,
-        pv: 2400,
-        amt: 2400
-      },
-      {
-        name: "Page B",
-        uv: 3000,
-        pv: 1398,
-        amt: 2210
-      },
-      {
-        name: "Page C",
-        uv: 2000,
-        pv: 9800,
-        amt: 2290
-      },
-      {
-        name: "Page D",
-        uv: 2780,
-        pv: 3908,
-        amt: 2000
-      },
-      {
-        name: "Page E",
-        uv: 1890,
-        pv: 4800,
-        amt: 2181
-      },
-      {
-        name: "Page F",
-        uv: 2390,
-        pv: 3800,
-        amt: 2500
-      },
-      {
-        name: "Page G",
-        uv: 3490,
-        pv: 4300,
-        amt: 2100
-      }
-    ];
+    
     /**
      * Devolvemos la visualización por pantalla del componenete
      */
@@ -208,8 +167,8 @@ class GraficoCuentas extends Component {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="gastos" stackId="a" fill="#8884d8" />
-          <Bar dataKey="ahorrado" stackId="a" fill="#82ca9d" />
+          <Bar dataKey="gastos" stackId="a" fill="#8884d8" unit="€"/>
+          <Bar dataKey="ahorrado" stackId="a" fill="#82ca9d" unit="€" />
         </BarChart>
       </ResponsiveContainer>
     );

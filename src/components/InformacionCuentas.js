@@ -290,26 +290,7 @@ class InformacionCuentas extends Component {
     var date = new Date(fecha * 1000);
     return date.toLocaleDateString();
   }
-  /**
-   * Funcion que adecua los valores de distribucion reales de cuentas a un
-   * formato entendible para el grafico
-   * @param {*} cuentas
-   * 2020.05.10
-   */
-  prepararDatosReales(cuentas) {
-    var data = [];
-
-    console.log("el data es " + data);
-    cuentas.map(cuenta => {
-      data.push({
-        name: cuenta.name,
-        value: cuenta.amount,
-        color: this.elegircolor(cuenta.color)
-      });
-    });
-    console.log("el data es " + cuentas);
-    return data;
-  }
+  
   /**
    * Funcion que adecua los valores de distribucion de ingreso en cuentas
    * a un formato entendible para el grafico
