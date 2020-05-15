@@ -27,16 +27,16 @@ const styles = theme => ({
     maxHeight: "100%",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   titular: {
-      position:"absolute",
-      display:"block",
-      alignSelf: "auto",
-      [theme.breakpoints.up("md")]: {
-        fontWeight: "bold",
-        fontSide: "large",
-      },
+    position: "absolute",
+    display: "block",
+    alignSelf: "auto",
+    [theme.breakpoints.up("md")]: {
+      fontWeight: "bold",
+      fontSide: "large"
+    }
   }
 });
 class GraficoCuentas extends Component {
@@ -53,6 +53,32 @@ class GraficoCuentas extends Component {
   render() {
     //Constante para poder usar los estilos de styles
     const { classes } = this.props;
+    const RADIAN = Math.PI / 180;
+    const renderCustomizedLabel = ({
+      cx,
+      cy,
+      midAngle,
+      innerRadius,
+      outerRadius,
+      percent,
+      index
+    }) => {
+      const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+      const x = cx + radius * Math.cos(-midAngle * RADIAN);
+      const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+      return (
+        <text
+          x={x}
+          y={y}
+          fill="white"
+          textAnchor="middle"
+          dominantBaseline="central"
+        >
+          {`${(percent * 100).toFixed(0)}%`}
+        </text>
+      );
+    };
     /**
      * Devolvemos la visualización por pantalla del componenete
      */
@@ -64,7 +90,8 @@ class GraficoCuentas extends Component {
         className={classes.fondoGrafico}
       >
         <Typography variant="h6" className={classes.titular}>
-          Distribución<br/> de Ingresos
+          Distribución
+          <br /> de Ingresos
         </Typography>
 
         <ResponsiveContainer width={"100%"} height={"90%"}>
@@ -73,15 +100,16 @@ class GraficoCuentas extends Component {
               isAnimationActive={true}
               data={this.props.data}
               fill="#8884d8"
-              label
-              innerRadius={"70%"}
+              label={renderCustomizedLabel}
+              labelLine={false}
+              innerRadius={"55%"}
               paddingAngle={2}
             >
               {this.props.data.map(cuenta => (
                 <Cell fill={cuenta.color} />
               ))}
             </Pie>
-            <Tooltip />
+            <Tooltip payload={[{ unit: "%" }]} />
           </PieChart>
         </ResponsiveContainer>
       </Paper>

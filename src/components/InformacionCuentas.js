@@ -323,7 +323,7 @@ class InformacionCuentas extends Component {
       data.push({
         name: cuenta.name,
         value: cuenta.XXXXX[0].distribution,
-        color: this.elegircolor(cuenta.color)
+        color: this.elegircolor(cuenta.color),
       });
     });
     if(prevData["distribution"]>0){

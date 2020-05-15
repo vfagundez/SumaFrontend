@@ -1,11 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import clsx from "clsx";
-import { Hidden } from "@material-ui/core";
+import { Hidden, withStyles } from "@material-ui/core";
 import {
   PieChart,
   Pie,
@@ -18,9 +18,9 @@ import {
   YAxis,
   CartesianGrid
 } from "recharts";
-import GraficoIngresosGastos from './Dashboard/GraficoIngresosGastos';
+import GraficoIngresosGastos from "./Dashboard/GraficoIngresosGastos";
 const drawerWidth = 240;
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   navBottom: {
     width: "100%",
     position: "absolute",
@@ -36,8 +36,10 @@ const useStyles = makeStyles(theme => ({
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    height: "100vh",
     overflow: "auto",
+    [theme.breakpoints.up("md")]: {
+      marginTop: "64px"
+    },
     marginLeft: drawerWidth,
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
@@ -45,12 +47,31 @@ const useStyles = makeStyles(theme => ({
     })
   },
   contentShift: {
+    //Si estamos en un ordenador incluimos un espacio para colocar la barra de navegacion
+    [theme.breakpoints.up("md")]: {
+      marginTop: "64px"
+    },
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     }),
     flexGrow: 1,
-    marginLeft: 0
+    marginLeft: theme.spacing(9),
+    [theme.breakpoints.down("sm")]: {
+      marginLeft: theme.spacing(0)
+    }
+  },
+  demo: {
+    width: "100%",
+    //maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+    position: "relative",
+    overflow: "auto",
+    [theme.breakpoints.up("md")]: {
+      height: "calc(100vh - 64px)"
+    },
+    height: "100vh",
+    maxHeight: "100%"
   },
   paper: {
     padding: theme.spacing(2),
@@ -61,45 +82,47 @@ const useStyles = makeStyles(theme => ({
   fixedHeight: {
     height: 240
   }
-}));
+});
 
-export default function Informacion(props) {
-  const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const data01 = [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-    { name: "Group E", value: 278 },
-    { name: "Group F", value: 189 }
-  ];
-
-  const data02 = [
-    { name: "Group A", value: 2400 },
-    { name: "Group B", value: 4567 },
-    { name: "Group C", value: 1398 },
-    { name: "Group D", value: 9800 },
-    { name: "Group E", value: 3908 },
-    { name: "Group F", value: 4800 }
-  ];
-  
-  return (
-    <main className={props.open ? classes.content : classes.contentShift}>
-      <Hidden smDown>
-        <div className={classes.appBarSpacer} />
-      </Hidden>
-      <Container maxWidth="lg" className={classes.container}>
-        <Grid container spacing={3}>
+class Informacion extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    const { classes } = this.props;
+    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    const data01 = [
+      { name: "Group A", value: 400 },
+      { name: "Group B", value: 300 },
+      { name: "Group C", value: 300 },
+      { name: "Group D", value: 200 },
+      { name: "Group E", value: 278 },
+      { name: "Group F", value: 189 }
+    ];
+    return (
+      <main
+        className={this.props.open ? classes.content : classes.contentShift}
+      >
+        <Grid container spacing={0}>
           {/* Chart */}
           <Grid item xs={12} md={8} lg={9}>
-            <Paper className={fixedHeightPaper}>
-              <GraficoIngresosGastos/>
+            <Paper
+              elevation={0}
+              square
+              variant="outlined"
+              className={fixedHeightPaper}
+            >
+              <GraficoIngresosGastos />
             </Paper>
           </Grid>
           {/* Recent Deposits */}
           <Grid item xs={12} md={4} lg={3}>
-            <Paper className={fixedHeightPaper}>
+            <Paper
+              elevation={0}
+              square
+              variant="outlined"
+              className={fixedHeightPaper}
+            >
               <PieChart width={250} height={200}>
                 <Pie
                   isAnimationActive={false}
@@ -116,10 +139,18 @@ export default function Informacion(props) {
           </Grid>
           {/* Recent Orders */}
           <Grid item xs={12}>
-            <Paper className={fixedHeightPaper}>hola</Paper>
+            <Paper
+              elevation={0}
+              square
+              variant="outlined"
+              className={fixedHeightPaper}
+            >
+              hola
+            </Paper>
           </Grid>
         </Grid>
-      </Container>
-    </main>
-  );
+      </main>
+    );
+  }
 }
+export default withStyles(styles)(Informacion);
