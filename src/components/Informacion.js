@@ -21,6 +21,7 @@ import {
 import GraficoIngresosGastos from "./Dashboard/GraficoIngresosGastos";
 import GraficoDistribucionCuentas from "./Dashboard/GraficoDistribucionCuentas"
 import GraficoDistribucionIngresos from "./Dashboard/GraficoDistribucionIngresos"
+import UltimoMes from "./Dashboard/UltimoMes"
 const drawerWidth = 240;
 const styles = theme => ({
   navBottom: {
@@ -52,6 +53,10 @@ const styles = theme => ({
     //Si estamos en un ordenador incluimos un espacio para colocar la barra de navegacion
     [theme.breakpoints.up("md")]: {
       marginTop: "64px"
+    },
+    //Si estamos en un ordenador incluimos un espacio para colocar la barra de navegacion
+    [theme.breakpoints.down("md")]: {
+      marginBottom: "64px"
     },
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
@@ -126,6 +131,17 @@ class Informacion extends Component {
               className={fixedHeightPaper}
             >
               <GraficoDistribucionCuentas/>
+            </Paper>
+          </Grid>
+          {/* Recent Deposits */}
+          <Grid item xs={12} md={4} lg={6}>
+            <Paper
+              elevation={0}
+              square
+              variant="outlined"
+              className={fixedHeightPaper}
+            >
+              <UltimoMes/>
             </Paper>
           </Grid>
           {/* Chart */}

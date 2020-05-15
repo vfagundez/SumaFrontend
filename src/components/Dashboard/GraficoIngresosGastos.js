@@ -146,7 +146,7 @@ class GraficoCuentas extends Component {
       }
     });
 
-    console.log(dataGrafico);
+    //console.log(dataGrafico);
     return dataGrafico;
   }
   /**
@@ -167,8 +167,8 @@ class GraficoCuentas extends Component {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="gastos" stackId="a" fill="#8884d8" unit="€"/>
-          <Bar dataKey="ahorrado" stackId="a" fill="#82ca9d" unit="€" />
+          <Bar dataKey="gastos" stackId="a" fill="#654F97" unit="€"/>
+          <Bar dataKey="ahorrado" stackId="a" fill="#c4e1ee" unit="€" />
         </BarChart>
       </ResponsiveContainer>
     );

@@ -14,6 +14,7 @@ import {
   ResponsiveContainer
 } from "recharts";
 import Interfaz from "../../classes/Interfaz";
+import { Link } from "react-router-dom";
 const styles = theme => ({
   fondoGrafico: {
     width: "100%",
@@ -37,6 +38,15 @@ const styles = theme => ({
       fontWeight: "bold",
       fontSide: "large"
     }
+  },
+  enlace: {
+    position: "absolute",
+    display: "block",
+    alignSelf: "flex-end",
+    [theme.breakpoints.up("md")]: {
+      fontWeight: "bold",
+      fontSide: "large"
+    }
   }
 });
 
@@ -50,6 +60,7 @@ class GraficoCuentas extends Component {
     this.state = {
         cuentas: [],
         loading: true, //indica si la información se esta cargando
+        balance: 0,
     }
     this.prepararDatosReales = this.prepararDatosReales.bind(this);
     this.prepararDatos = this.prepararDatos.bind(this);
@@ -84,6 +95,14 @@ class GraficoCuentas extends Component {
         );
       });
   }
+  //Funcion que calcula el total de todas las cuentas del usuario
+  calcularBalance = () =>{
+    let total = 0;
+    this.state.cuentas.map(cuenta =>{
+      total = total +cuenta.amount;
+    })
+    return total.toFixed(2);
+  }
   /**
    * Funcion que adecua los valores de distribucion reales de cuentas a un
    * formato entendible para el grafico
@@ -92,15 +111,16 @@ class GraficoCuentas extends Component {
    */
   prepararDatosReales(cuentas) {
     var data = [];
-
     cuentas.map(cuenta => {
       data.push({
         name: cuenta.name,
         value: cuenta.amount,
         color:  this.Interface.elegirColor(cuenta.color)
       });
+      
     });
     console.log("el data es " + cuentas);
+    
     return data;
   }
     /**
@@ -176,9 +196,11 @@ class GraficoCuentas extends Component {
         square
         className={classes.fondoGrafico}
       >
-        <Typography variant="h6" className={classes.titular}>
-          Distribución
-          <br /> de Cuentas (€)
+        <Typography variant="h5" className={classes.titular}>
+        <Typography variant="subtitle2" >
+          Balance
+          </Typography>
+          {this.calcularBalance()}€
         </Typography>
 
         <ResponsiveContainer width={"100%"} height={"90%"}>
@@ -199,7 +221,13 @@ class GraficoCuentas extends Component {
             <Tooltip payload={[{ unit: "%" }]} />
           </PieChart>
         </ResponsiveContainer>
+        
+        <Typography variant="subtitle2" className={classes.enlace}>
+        <Link to="/movimientos">Ver Movimientos</Link>
+        </Typography>
+        
       </Paper>
+      
     );
   }
 }

@@ -14,6 +14,7 @@ import {
   ResponsiveContainer
 } from "recharts";
 import Interfaz from "../../classes/Interfaz";
+import { Link } from "react-router-dom";
 const styles = theme => ({
   fondoGrafico: {
     width: "100%",
@@ -33,6 +34,15 @@ const styles = theme => ({
     position: "absolute",
     display: "block",
     alignSelf: "auto",
+    [theme.breakpoints.up("md")]: {
+      fontWeight: "bold",
+      fontSide: "large"
+    }
+  },
+  enlace: {
+    position: "absolute",
+    display: "block",
+    alignSelf: "flex-end",
     [theme.breakpoints.up("md")]: {
       fontWeight: "bold",
       fontSide: "large"
@@ -199,6 +209,9 @@ class GraficoCuentas extends Component {
             <Tooltip payload={[{ unit: "%" }]} />
           </PieChart>
         </ResponsiveContainer>
+        <Typography variant="subtitle2" className={classes.enlace}>
+        <Link to="/cuentas">Ver Cuentas</Link>
+        </Typography>
       </Paper>
     );
   }
