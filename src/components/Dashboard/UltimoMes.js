@@ -199,7 +199,7 @@ class UltimoMes extends Component {
           Ultimo Mes
         </Typography>
         <Grid container>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <Grid container>
               <Grid
                 item
@@ -234,7 +234,7 @@ class UltimoMes extends Component {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <Grid container>
               <Grid
                 item
