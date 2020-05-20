@@ -53,9 +53,9 @@ class AvatarUsuario extends Component {
           <Grid item xs={12} className={classes.Nombre}>
             <Typography align="center"variant="h5">{this.DatosUser.obtenerNombreUsuario()}</Typography>
           </Grid>
-            <Button variant="contained"size="small" color="primary" className={classes.margin}>
+            {/**<Button variant="contained"size="small" color="primary" className={classes.margin}>
           Editar
-        </Button>
+    </Button>*/}
           <Grid item xs={12}>
             <DatosUsuario/>
           </Grid>
