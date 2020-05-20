@@ -14,7 +14,6 @@ import Button from "@material-ui/core/Button";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 
-
 const styles = theme => ({
   navBottom: {
     zIndex: theme.zIndex.drawer + 1,
@@ -28,8 +27,8 @@ const styles = theme => ({
     //backgroundColor: 'blue',//theme.palette.background.paper,
     position: "relative",
     overflow: "auto",
-    [theme.breakpoints.up('md')]: {
-      height: 'calc(100vh - 64px)',
+    [theme.breakpoints.up("md")]: {
+      height: "calc(100vh - 64px)"
     },
     height: "100vh",
     maxHeight: "100%"
@@ -70,11 +69,10 @@ class InfoMovimiento extends Component {
       loading: true,
       token: 0,
       redirect: false,
-      mov: this.props.movimiento,//indica si hay un movimiento seleccionado  o no
-
+      mov: this.props.movimiento //indica si hay un movimiento seleccionado  o no
     };
     this.volver = this.volver.bind(this);
-    this.eliminar =this.eliminar.bind(this);
+    this.eliminar = this.eliminar.bind(this);
   }
   componentWillMount() {
     var userdata = JSON.parse(sessionStorage.getItem("userData"));
@@ -108,12 +106,12 @@ class InfoMovimiento extends Component {
       });
   }
   //Para cerrar la informacion del movimiento en cuestion
-  volver(e){
-      this.props.handleMovimiento(e,0);
-      this.setState({mov:!this.state.movimiento})
+  volver(e) {
+    this.props.handleMovimiento(e, 0);
+    this.setState({ mov: !this.state.movimiento });
   }
   //elimina el movimiento actual de la base de datos
-  eliminar(){
+  eliminar() {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer " + this.state.token);
 
@@ -134,7 +132,7 @@ class InfoMovimiento extends Component {
           300
         );
       });
-      this.volver();
+    this.volver();
   }
   render() {
     const { classes } = this.props;
@@ -144,19 +142,25 @@ class InfoMovimiento extends Component {
           {/**La barra de opciones del movimiento */}
           <AppBar position="static" color="transparent" elevation={0}>
             <Toolbar>
-                {/**Boton para cerrar la información del movimiento */}
+              {/**Boton para cerrar la información del movimiento */}
               <IconButton
                 edge="start"
                 className={classes.menuButton}
                 color="inherit"
                 aria-label="menu"
-                onClick={(e)=> this.volver(e)}
+                onClick={e => this.volver(e)}
               >
                 <ArrowBackIcon />
               </IconButton>
               <Typography variant="h6" className={classes.title}></Typography>
               {/**Boton para borrar el movimiento */}
-              <IconButton edge="end" color="inherit" aria-label="menu" className={classes.menuButton} onClick={this.eliminar}>
+              <IconButton
+                edge="end"
+                color="inherit"
+                aria-label="menu"
+                className={classes.menuButton}
+                onClick={this.eliminar}
+              >
                 <DeleteOutlineIcon />
               </IconButton>
             </Toolbar>
@@ -170,7 +174,11 @@ class InfoMovimiento extends Component {
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography gutterBottom variant="h6" className={classes.precio}>
+                <Typography
+                  gutterBottom
+                  variant="h6"
+                  className={classes.precio}
+                >
                   {this.state.movimiento.amount + "€"}
                 </Typography>
               </Grid>
@@ -180,6 +188,7 @@ class InfoMovimiento extends Component {
             </Typography>
           </div>
           <Divider variant="middle" />
+          {/** 
           <div className={classes.section2}>
             <Typography gutterBottom variant="body1">
               Categorias
@@ -191,9 +200,7 @@ class InfoMovimiento extends Component {
               <Chip className={classes.chip} label="Hard" />
             </div>
           </div>
-          <div className={classes.section3}>
-            <Button color="primary">Add to cart</Button>
-          </div>
+            */}
         </div>
       </Grid>
     );

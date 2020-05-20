@@ -125,7 +125,7 @@ class InformacionMovimiento extends Component {
       movimientokey: 0,
       todos: false, //indica si se deben mostrar todos los movimientos
     };
-    this.prueba = this.prueba.bind(this);
+
     this.handleCuenta = this.handleCuenta.bind(this);
     this.elegircolor = this.elegircolor.bind(this);
     this.elegirIcono = this.elegirIcono.bind(this);
@@ -162,9 +162,7 @@ class InformacionMovimiento extends Component {
         );
       });
   }
-  prueba() {
-    alert("hola");
-  }
+
   handleTodosMovimientos(){
     this.setState({cuenta:true})
     this.setState({todos:!this.state.todos})
@@ -340,7 +338,7 @@ class InformacionMovimiento extends Component {
                       onClick={e => this.handleMovimiento(e, movimiento.id)}
                     >
                       <ListItemAvatar>
-                        <div onClick={this.prueba}>
+
                           <Avatar
                             style={{
                               backgroundColor: this.elegircolor(cuenta.color)
@@ -348,7 +346,7 @@ class InformacionMovimiento extends Component {
                           >
                             {this.elegirIcono(movimiento.amount)}
                           </Avatar>
-                        </div>
+
                       </ListItemAvatar>
                       <ListItemText
                         primary={movimiento.name}
@@ -370,7 +368,7 @@ class InformacionMovimiento extends Component {
                         onClick={e => this.handleMovimiento(e, movimiento.id)}
                       >
                         <ListItemAvatar>
-                          <div onClick={this.prueba}>
+  
                             <Avatar
                               style={{
                                 backgroundColor: this.elegircolor(cuenta.color)
@@ -378,7 +376,6 @@ class InformacionMovimiento extends Component {
                             >
                               {this.elegirIcono(movimiento.amount)}
                             </Avatar>
-                          </div>
                         </ListItemAvatar>
                         <ListItemText
                           primary={movimiento.name}
@@ -434,7 +431,7 @@ class InformacionMovimiento extends Component {
                     onClick={e => this.handleTodosMovimientos(e)}
                   >
                     <ListItemAvatar>
-                      <div onClick={this.prueba}>
+     
                         <Avatar
                           style={{
                             backgroundColor: 'blue'
@@ -442,7 +439,7 @@ class InformacionMovimiento extends Component {
                         >
                           <CompareArrowsIcon />
                         </Avatar>
-                      </div>
+
                     </ListItemAvatar>
                     <ListItemText
                       primary="Todos los movimientos"
@@ -455,7 +452,7 @@ class InformacionMovimiento extends Component {
                     onClick={e => this.handleCuenta(e, cuenta.id)}
                   >
                     <ListItemAvatar>
-                      <div onClick={this.prueba}>
+
                         <Avatar
                           style={{
                             backgroundColor: this.elegircolor(cuenta.color)
@@ -463,7 +460,7 @@ class InformacionMovimiento extends Component {
                         >
                           <AccountBalanceWalletIcon />
                         </Avatar>
-                      </div>
+
                     </ListItemAvatar>
                     <ListItemText
                       primary={cuenta.name}
