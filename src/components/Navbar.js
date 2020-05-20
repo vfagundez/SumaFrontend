@@ -38,7 +38,7 @@ const styles = theme => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    minHeight:'64px',
+    minHeight: "64px"
   },
   drawer: {
     width: drawerWidth,
@@ -116,6 +116,7 @@ class NavBar extends Component {
     this.obtenerRuta = this.obtenerRuta.bind(this);
     this.handleDrawerMobileOpen = this.handleDrawerMobileOpen.bind(this);
   }
+
   //isMobile = useMediaQuery(this.theme.breakpoints.down("xs"));
   //Funcion encargada de finalizar la sesión
   logout() {
@@ -123,7 +124,12 @@ class NavBar extends Component {
     sessionStorage.clear();
     this.setState({ redirect: true });
   }
-
+  //Función que devuelve la inicial del nombre del usuario registrado
+  obtenerInicialUsuario(){
+    var userdata = JSON.parse(sessionStorage.getItem("userData"));
+    var nombre = userdata.username;
+    return nombre.charAt(0);
+  }
   handleClick(event) {
     this.setState({ anchorEl: event.currentTarget });
   }
@@ -163,202 +169,203 @@ class NavBar extends Component {
     return (
       <div>
         <Hidden smDown>
-        {/*BARRA DE NAVEGACIÓN*/}
-        <AppBar
-          position="fixed"
-          className={classes.appBar}
-          color="white"
-          elevation={0}
-        >
-          <Toolbar style={{minHeight:'64px'}}>
-            <Hidden smDown>
-              <IconButton
-                edge="start"
-                className={classes.menuButton}
-                color="inherit"
-                aria-label="menu"
-                onClick={this.handleDrawerOpen}
-              >
-                <MenuIcon />
-              </IconButton>
-            </Hidden>
-            <Hidden smUp>
-              <IconButton
-                edge="start"
-                className={classes.menuButton}
-                color="inherit"
-                aria-label="menu"
-                onClick={this.handleDrawerMobileOpen}
-              >
-                <MenuIcon />
-              </IconButton>
-            </Hidden>
-              
+          {/*BARRA DE NAVEGACIÓN*/}
+          <AppBar
+            position="fixed"
+            className={classes.appBar}
+            color="white"
+            elevation={0}
+          >
+            <Toolbar style={{ minHeight: "64px" }}>
+              <Hidden smDown>
+                <IconButton
+                  edge="start"
+                  className={classes.menuButton}
+                  color="inherit"
+                  aria-label="menu"
+                  onClick={this.handleDrawerOpen}
+                >
+                  <MenuIcon />
+                </IconButton>
+              </Hidden>
+              <Hidden smUp>
+                <IconButton
+                  edge="start"
+                  className={classes.menuButton}
+                  color="inherit"
+                  aria-label="menu"
+                  onClick={this.handleDrawerMobileOpen}
+                >
+                  <MenuIcon />
+                </IconButton>
+              </Hidden>
+
               <img
-              src={logo}
-              alt="elija cuenta"
-              height="20"
-              weight="20"
-              style={{marginRight:'10px'}}
-            />
-         
-            <div className={classes.title}>
-            <Typography variant="h6" >
-              <Hidden smDown>{this.obtenerRuta()}</Hidden>
-            </Typography>
-            </div>
-            
-            <Hidden mdUp>
-              {/*El logo de la aplicación para movil*/}
-              <Box className={classes.prueba}>
-                <SvgIcon>
-                  <g
-                    id="Grupo_24"
-                    data-name="Grupo 24"
-                    transform="translate(-1833.959 -751.815)"
-                  >
-                    <path
-                      id="Trazado_33"
-                      data-name="Trazado 33"
-                      d="M134.432,258.578v-3.729l-5.832.124h-.017l0-5.974-3.728,0,0,5.845H119v3.734h5.849v5.849h3.733v-5.849Z"
-                      transform="translate(1714.959 509.116)"
-                      fill="#ffc600"
-                    />
-                  </g>
-                </SvgIcon>
-              </Box>
-            </Hidden>
-            <div>
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                color="inherit"
-                onClick={this.handleClick}
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="simple-menu"
-                anchorEl={this.state.anchorEl}
-                keepMounted
-                open={Boolean(this.state.anchorEl)}
-                onClose={this.handleClose}
-              >
-                <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                <MenuItem onClick={this.logout}>Logout</MenuItem>
-              </Menu>
-            </div>
-          </Toolbar>
-          <Divider orientation="horizontal" />
-        </AppBar>
+                src={logo}
+                alt="elija cuenta"
+                height="20"
+                weight="20"
+                style={{ marginRight: "10px" }}
+              />
 
-        {/*MENU DE NAVEGACIÓN PARA ORDENADOR*/}
-        <Hidden smDown>
-          <Drawer
-            variant="permanent"
-            classes={{
-              paper: clsx(
-                classes.drawerPaper,
-                !this.state.open && classes.drawerPaperClose
-              )
-            }}
-            open={this.state.open}
-          >
-            <Toolbar />
-            <List className={classes.menuLateral}>
-              <ListItem
-                button
-                key="Dashboard"
-                onClick={event => (window.location.href = "/")}
-              >
-                <ListItemIcon>
-                  <DashboardIcon />
-                </ListItemIcon>
-                <ListItemText primary="Panel Principal" />
-              </ListItem>
+              <div className={classes.title}>
+                <Typography variant="h6">
+                  <Hidden smDown>{this.obtenerRuta()}</Hidden>
+                </Typography>
+              </div>
 
-              <ListItem
-                button
-                key="Cuentas"
-                onClick={event => (window.location.href = "/cuentas")}
-              >
-                <ListItemIcon>
-                  <AccountBalanceWalletIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cuentas" />
-              </ListItem>
+              <Hidden mdUp>
+                {/*El logo de la aplicación para movil*/}
+                <Box className={classes.prueba}>
+                  <SvgIcon>
+                    <g
+                      id="Grupo_24"
+                      data-name="Grupo 24"
+                      transform="translate(-1833.959 -751.815)"
+                    >
+                      <path
+                        id="Trazado_33"
+                        data-name="Trazado 33"
+                        d="M134.432,258.578v-3.729l-5.832.124h-.017l0-5.974-3.728,0,0,5.845H119v3.734h5.849v5.849h3.733v-5.849Z"
+                        transform="translate(1714.959 509.116)"
+                        fill="#ffc600"
+                      />
+                    </g>
+                  </SvgIcon>
+                </Box>
+              </Hidden>
+              <div>
+                <IconButton
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  color="inherit"
+                  onClick={this.handleClick}
+                >
+                  <Avatar style={{backgroundColor:"#3f51b5"}} >{this.obtenerInicialUsuario()}</Avatar>
+                 
+                </IconButton>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={this.state.anchorEl}
+                  keepMounted
+                  open={Boolean(this.state.anchorEl)}
+                  onClose={this.handleClose}
+                >
+                  <MenuItem onClick={() => (window.location.href = "/usuario")}>
+                    Mi Cuenta
+                  </MenuItem>
+                  <MenuItem onClick={this.logout}>Cerrar Sesión</MenuItem>
+                </Menu>
+              </div>
+            </Toolbar>
+            <Divider orientation="horizontal" />
+          </AppBar>
 
-              <ListItem
-                button
-                key="Movimientos"
-                onClick={event => (window.location.href = "/movimientos")}
-              >
-                <ListItemIcon>
-                  <CompareArrowsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Movimientos" />
-              </ListItem>
-            </List>
-            <Divider />
-          </Drawer>
-        </Hidden>
-        {/*MENU DE NAVEGACIÓN PARA MOVIL*/}
-        <Hidden smUp>
-          <Drawer
-            classes={{
-              paper: clsx(
-                classes.drawerPaper,
-                !this.state.open1 && classes.drawerPaperClose
-              )
-            }}
-            open={this.state.open1}
-          >
-            
-            <div className={classes.drawerHeader}>
-              <IconButton onClick={this.handleDrawerMobileOpen}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </div>
-            <Divider />
-            <List className={classes.menuLateral}>
-              <ListItem
-                button
-                key="Dashboard"
-                onClick={event => (window.location.href = "/")}
-              >
-                <ListItemIcon>
-                  <DashboardIcon />
-                </ListItemIcon>
-                <ListItemText primary="Panel Principal" />
-              </ListItem>
+          {/*MENU DE NAVEGACIÓN PARA ORDENADOR*/}
+          <Hidden smDown>
+            <Drawer
+              variant="permanent"
+              classes={{
+                paper: clsx(
+                  classes.drawerPaper,
+                  !this.state.open && classes.drawerPaperClose
+                )
+              }}
+              open={this.state.open}
+            >
+              <Toolbar />
+              <List className={classes.menuLateral}>
+                <ListItem
+                  button
+                  key="Dashboard"
+                  onClick={event => (window.location.href = "/")}
+                >
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Panel Principal" />
+                </ListItem>
 
-              <ListItem
-                button
-                key="Cuentas"
-                onClick={event => (window.location.href = "/cuentas")}
-              >
-                <ListItemIcon>
-                  <AccountBalanceWalletIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cuentas" />
-              </ListItem>
+                <ListItem
+                  button
+                  key="Cuentas"
+                  onClick={event => (window.location.href = "/cuentas")}
+                >
+                  <ListItemIcon>
+                    <AccountBalanceWalletIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Cuentas" />
+                </ListItem>
 
-              <ListItem
-                button
-                key="Movimientos"
-                onClick={event => (window.location.href = "/movimientos")}
-              >
-                <ListItemIcon>
-                  <CompareArrowsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Movimientos" />
-              </ListItem>
-            </List>
-            <Divider />
-          </Drawer>
-        </Hidden>
+                <ListItem
+                  button
+                  key="Movimientos"
+                  onClick={event => (window.location.href = "/movimientos")}
+                >
+                  <ListItemIcon>
+                    <CompareArrowsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Movimientos" />
+                </ListItem>
+              </List>
+              <Divider />
+            </Drawer>
+          </Hidden>
+          {/*MENU DE NAVEGACIÓN PARA MOVIL*/}
+          <Hidden smUp>
+            <Drawer
+              classes={{
+                paper: clsx(
+                  classes.drawerPaper,
+                  !this.state.open1 && classes.drawerPaperClose
+                )
+              }}
+              open={this.state.open1}
+            >
+              <div className={classes.drawerHeader}>
+                <IconButton onClick={this.handleDrawerMobileOpen}>
+                  <ChevronLeftIcon />
+                </IconButton>
+              </div>
+              <Divider />
+              <List className={classes.menuLateral}>
+                <ListItem
+                  button
+                  key="Dashboard"
+                  onClick={event => (window.location.href = "/")}
+                >
+                  <ListItemIcon>
+                    <DashboardIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Panel Principal" />
+                </ListItem>
+
+                <ListItem
+                  button
+                  key="Cuentas"
+                  onClick={event => (window.location.href = "/cuentas")}
+                >
+                  <ListItemIcon>
+                    <AccountBalanceWalletIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Cuentas" />
+                </ListItem>
+
+                <ListItem
+                  button
+                  key="Movimientos"
+                  onClick={event => (window.location.href = "/movimientos")}
+                >
+                  <ListItemIcon>
+                    <CompareArrowsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Movimientos" />
+                </ListItem>
+              </List>
+              <Divider />
+            </Drawer>
+          </Hidden>
         </Hidden>
       </div>
     );

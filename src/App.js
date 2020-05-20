@@ -13,6 +13,7 @@ import {
 } from "react-router-dom";
 import Movimientos from './views/Movimientos';
 import Cuentas from './views/Cuentas';
+import Usuario from './views/Usuario';
 import { light, dark } from "./theme";
 
 
@@ -48,6 +49,10 @@ function App() {
         {/*Ruta para registrarse en la aplicación*/}
         <Route exact path="/signup">
           <SignUp/>
+        </Route>
+        {/*Ruta para acceder a la información del usuario*/}
+        <Route exact path="/usuario">
+          <Usuario/>
         </Route>
         {/*Ruta para las cuentas*/}
         <Route exact path="/cuentas">

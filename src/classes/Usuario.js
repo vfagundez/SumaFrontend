@@ -43,5 +43,17 @@ export default  class Usuario{
           
         
     }
+    //Función que devuelve la inicial del nombre del usuario registrado
+  obtenerInicialUsuario() {
+    var userdata = JSON.parse(sessionStorage.getItem("userData"));
+    var nombre = userdata.username;
+    return nombre.charAt(0);
+  }
+    //Función que devuelve del nombre del usuario registrado
+    obtenerNombreUsuario() {
+      var userdata = JSON.parse(sessionStorage.getItem("userData"));
+      var nombre = userdata.username;
+      return nombre;
+    }
 }
 

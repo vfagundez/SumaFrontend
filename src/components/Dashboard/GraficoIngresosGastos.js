@@ -94,10 +94,10 @@ class GraficoCuentas extends Component {
    * @param {*} movimientos 
    */
   prepararDatos(movimientos) {
-    console.log("Los movimientos son" +JSON.stringify(this.state.movimientos)) 
+    //console.log("Los movimientos son" +JSON.stringify(this.state.movimientos)) 
     var data = [];
     let prevData = JSON.parse(sessionStorage.getItem("userData"));
-    console.log("el data es " + data);
+    //console.log("el data es " + data);
     movimientos.map(movimiento => {
       var date = new Date(movimiento.updated_at * 1000);
       var mes = date.getMonth();
